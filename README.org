@@ -1,0 +1,4 @@
+Evolution-offline-store
+
+Evolution-offline-store is an Evolution extension for storing an offline copy of
+mail in a local maildir.

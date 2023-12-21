@@ -1,0 +1,2 @@
+option('plugin-install-dir', type: 'string', value: '', description: 'Plugin installation location')
+option('debugbuild',type: 'boolean', value: false, description: 'Create a debug build')

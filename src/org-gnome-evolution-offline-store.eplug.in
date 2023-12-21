@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<e-plugin-list>
+  <e-plugin
+      type="shlib"
+      id="org.gnome.evolution.plugin.evolution-offline-store"
+      location="@PLUGIN_INSTALL_DIR@/liborg-gnome-evolution-offline-store.so"
+      domain="@GETTEXT_PACKAGE@"
+      name="Evolution Offline Store">
+    <description>Support for storing all mail offline in a local maildir</description>
+    <author name="Tassos Manganaris" email="tassos.manganaris@gmail.com"/>
+  </e-plugin>
+</e-plugin-list>
+

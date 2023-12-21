@@ -1,0 +1,10 @@
+Installation Instructions
+*************************
+
+The build system is moved to meson and simplified. To configure the project
+and build the project do the following:
+	mkdir build && cd build
+	meson ..
+	meson install
+	
+To see details run meson configure
