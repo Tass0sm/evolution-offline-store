@@ -18,7 +18,7 @@ SHARE_INSTALL_PREFIX = join_paths(get_option('prefix'), 'share')
 plugindir = get_option('plugin-install-dir')
 
 if plugindir == ''
-   	plugindir = evolutionshell.get_variable(pkgconfig: 'plugindir')
+   	plugindir = evolutionshell.get_variable(pkgconfig: 'plugindir', default_value: '/usr/lib/evolution/plugins')
 endif
 
 if plugindir == ''
