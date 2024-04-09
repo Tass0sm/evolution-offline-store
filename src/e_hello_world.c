@@ -19,20 +19,13 @@ e_hello_world_constructed (GObject *object)
   extensible = e_extension_get_extensible (E_EXTENSION (object));
 
   /* This prints "Hello world from EShell!" */
-  g_message ("Hello world from %s!\n", G_OBJECT_TYPE_NAME (extensible));
+  g_print ("Hello world from %s!\n", G_OBJECT_TYPE_NAME (extensible));
 }
 
 static void
 e_hello_world_finalize (GObject *object)
 {
-  FILE *fptr = fopen("./test.txt", "w");
-
-  if (fptr == NULL) {
-    printf("Error!");
-  } else {
-    fprintf(fptr, "%d\n", 123);
-    fclose(fptr);
-  }
+  g_print ("Goodbye cruel world!\n");
 
   /* Chain up to parent's finalize() method. */
   G_OBJECT_CLASS (e_hello_world_parent_class)->finalize (object);
