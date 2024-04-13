@@ -34,7 +34,7 @@ endif
 conf_data = configuration_data()
 
 # Main project information
-conf_data.set('PROJECT_NAME', meson.project_name())
+conf_data.set_quoted('PROJECT_NAME', meson.project_name())
 conf_data.set('VERSION', meson.project_version())
 
 # We dont want deprecated functions from evolution data server
@@ -49,7 +49,7 @@ evoversion_int = evoversion_int * 10
 conf_data.set('EVOLUTION_VERSION', evoversion_int)
 
 conf_data.set('PLUGIN_INSTALL_DIR', plugindir)
-conf_data.set('GETTEXT_PACKAGE', meson.project_name())
+conf_data.set_quoted('GETTEXT_PACKAGE', meson.project_name())
 conf_data.set('LOCALEDIR', join_paths(SHARE_INSTALL_PREFIX, 'locale'))
 
 configure_file(
