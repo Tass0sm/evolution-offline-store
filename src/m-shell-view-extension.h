@@ -8,18 +8,21 @@
 /* Standard GObject macros */
 #define M_TYPE_SHELL_VIEW_EXTENSION \
 	(m_shell_view_extension_get_type ())
+
 #define M_SHELL_VIEW_EXTENSION(obj) \
 	(G_TYPE_CHECK_INSTANCE_CAST \
 	((obj), M_TYPE_SHELL_VIEW_EXTENSION, MShellViewExtension))
 #define M_SHELL_VIEW_EXTENSION_CLASS(cls) \
 	(G_TYPE_CHECK_CLASS_CAST \
 	((cls), M_TYPE_SHELL_VIEW_EXTENSION, MShellViewExtensionClass))
+
 #define M_IS_SHELL_VIEW_EXTENSION(obj) \
 	(G_TYPE_CHECK_INSTANCE_TYPE \
 	((obj), M_TYPE_SHELL_VIEW_EXTENSION))
 #define M_IS_SHELL_VIEW_EXTENSION_CLASS(cls) \
 	(G_TYPE_CHECK_CLASS_TYPE \
 	((cls), M_TYPE_SHELL_VIEW_EXTENSION))
+
 #define M_SHELL_VIEW_EXTENSION_GET_CLASS(obj) \
 	(G_TYPE_INSTANCE_GET_CLASS \
 	((obj), M_TYPE_SHELL_VIEW_EXTENSION, MShellViewExtensionClass))

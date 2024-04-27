@@ -2,7 +2,7 @@
 #include <config.h>
 #endif
 
-#include "save_as_maildir_extension.h"
+#include "m-shell-view-extension.h"
 
 /* Module Entry Points */
 void e_module_load (GTypeModule *type_module);

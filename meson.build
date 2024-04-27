@@ -25,6 +25,22 @@ if plugindir == ''
 	plugindir = join_paths(evolutionshell.get_variable(pkgconfig: 'privlibdir'), 'plugins')
 endif
 
+
+moduledir = get_option('module-install-dir')
+
+if moduledir == ''
+   	moduledir = evolutionshell.get_variable(pkgconfig: 'moduledir', default_value: '/usr/lib/evolution/modules')
+endif
+
+if moduledir == ''
+	moduledir = join_paths(evolutionshell.get_variable(pkgconfig: 'privlibdir'), 'modules')
+endif
+
+
+
+
+
+
 debugoption = get_option('debugbuild')
 if debugoption == true
 	add_project_arguments('-DDEBUG', language:'c')
@@ -51,15 +67,6 @@ conf_data.set('EVOLUTION_VERSION', evoversion_int)
 conf_data.set('PLUGIN_INSTALL_DIR', plugindir)
 conf_data.set_quoted('GETTEXT_PACKAGE', meson.project_name())
 conf_data.set('LOCALEDIR', join_paths(SHARE_INSTALL_PREFIX, 'locale'))
-
-configure_file(
-	input: 'src/org-gnome-evolution-offline-store.eplug.in',
-	output: 'org-gnome-evolution-offline-store.eplug',
-	configuration: conf_data,
-	install: true,
-	install_dir: plugindir,
-	install_mode: 'rw-r--r--'
-)
 
 configure_file(
 	output: 'config.h',

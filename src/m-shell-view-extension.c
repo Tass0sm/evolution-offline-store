@@ -8,7 +8,7 @@
 
 #include "m-mail-ui.h"
 
-#include "save_as_maildir_extension.h"
+#include "m-shell-view-extension.h"
 
 struct _MShellViewExtensionPrivate {
 	guint current_ui_id;
@@ -112,6 +112,14 @@ m_shell_view_extension_constructed (GObject *object)
 }
 
 static void
+m_shell_view_extension_init (MShellViewExtension *shell_view_ext)
+{
+	shell_view_ext->priv = m_shell_view_extension_get_instance_private (shell_view_ext);
+	shell_view_ext->priv->current_ui_id = 0;
+	shell_view_ext->priv->ui_definitions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+}
+
+static void
 m_shell_view_extension_finalize (GObject *object)
 {
 	MShellViewExtension *shell_view_ext = M_SHELL_VIEW_EXTENSION (object);
@@ -120,6 +128,12 @@ m_shell_view_extension_finalize (GObject *object)
 
 	/* Chain up to parent's method. */
 	G_OBJECT_CLASS (m_shell_view_extension_parent_class)->finalize (object);
+}
+
+void
+m_shell_view_extension_type_register (GTypeModule *type_module)
+{
+	m_shell_view_extension_register_type (type_module);
 }
 
 static void
@@ -140,18 +154,4 @@ m_shell_view_extension_class_init (MShellViewExtensionClass *class)
 static void
 m_shell_view_extension_class_finalize (MShellViewExtensionClass *class)
 {
-}
-
-static void
-m_shell_view_extension_init (MShellViewExtension *shell_view_ext)
-{
-	shell_view_ext->priv = m_shell_view_extension_get_instance_private (shell_view_ext);
-	shell_view_ext->priv->current_ui_id = 0;
-	shell_view_ext->priv->ui_definitions = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-}
-
-void
-m_shell_view_extension_type_register (GTypeModule *type_module)
-{
-	m_shell_view_extension_register_type (type_module);
 }
