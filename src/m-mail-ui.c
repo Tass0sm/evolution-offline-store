@@ -32,7 +32,7 @@
 #include "m-utils.h"
 #include "m-mail-ui.h"
 
-#include <mail/e-mail-reader-utils.h>
+#include "mail/m-mail-reader-utils.h"
 
 #define REQUIRE_SERVICE_PROTOCOL "maildir"
 
@@ -51,7 +51,7 @@ action_mail_message_cb (GtkAction *action,
 
   if (E_IS_MAIL_PANED_VIEW (mail_view)) {
     reader = E_MAIL_READER (mail_view);
-    e_mail_reader_save_messages (reader);
+    m_mail_reader_save_messages (reader);
   }
 }
 
