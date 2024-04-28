@@ -26,7 +26,7 @@ m_utils_enable_actions (GtkActionGroup *action_group,
 			guint n_entries,
 			gboolean enable)
 {
-	gint ii;
+	guint ii;
 
 	g_return_if_fail (action_group != NULL);
 	g_return_if_fail (entries != NULL);

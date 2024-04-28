@@ -32,36 +32,9 @@
 #include "m-utils.h"
 #include "m-mail-ui.h"
 
+#include <mail/e-mail-reader-utils.h>
+
 #define REQUIRE_SERVICE_PROTOCOL "maildir"
-
-static void
-test_reader_cb (GtkAction *action,
-		EMailReader *reader)
-{
-  GPtrArray *selected_uids = NULL;
-  CamelFolder *folder = NULL;
-  CamelMessageInfo *info;
-  const gchar *message_uid;
-  guint ii;
-
-  selected_uids = e_mail_reader_get_selected_uids (reader);
-  folder = e_mail_reader_ref_folder (reader);
-
-  g_print ("%s: Folder '%s' has selected %d messages:\n", G_STRFUNC,
-	   folder ? camel_folder_get_full_name (folder) : "[null]",
-	   selected_uids ? selected_uids->len : -1);
-
-  for (ii = 0; selected_uids && ii < selected_uids->len; ii++) {
-    message_uid = g_ptr_array_index (selected_uids, ii);
-    info = camel_folder_get_message_info (folder, message_uid);
-    camel_message_info_dump(info);
-  }
-
-  if (selected_uids)
-    g_ptr_array_unref (selected_uids);
-  g_clear_object (&folder);
-}
-
 
 static void
 action_mail_message_cb (GtkAction *action,
@@ -78,7 +51,7 @@ action_mail_message_cb (GtkAction *action,
 
   if (E_IS_MAIL_PANED_VIEW (mail_view)) {
     reader = E_MAIL_READER (mail_view);
-    test_reader_cb (action, reader);
+    e_mail_reader_save_messages (reader);
   }
 }
 
