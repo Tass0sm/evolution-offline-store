@@ -2,7 +2,6 @@ shared_library(
   'liborg-gnome-evolution-offline-store',
   ['evolution-offline-store.c',
    'm-shell-view-extension.c',
-   'save-in-maildir.c',
    'm-mail-ui.c',
    'm-utils.c'],
   name_prefix: '',
