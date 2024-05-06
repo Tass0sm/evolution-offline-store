@@ -146,7 +146,7 @@ m_mail_reader_save_messages (EMailReader *reader)
 
 		subject = camel_message_info_get_subject (info);
 		if (subject != NULL)
-			suggestion = g_strconcat (subject, ".mbox", NULL);
+			suggestion = g_strconcat (subject, ".maildir", NULL);
 		g_clear_object (&info);
 	}
 
@@ -165,9 +165,8 @@ m_mail_reader_save_messages (EMailReader *reader)
 	shell_backend = E_SHELL_BACKEND (backend);
 	shell = e_shell_backend_get_shell (shell_backend);
 
-	destination = m_shell_run_save_dialog (
-		shell, title, suggestion,
-		"*.mbox:application/mbox,message/rfc822", NULL, NULL);
+	destination = m_shell_run_create_dir_dialog (
+		shell, title, suggestion, NULL, NULL);
 
 	if (destination == NULL)
 		goto exit;
@@ -181,7 +180,7 @@ m_mail_reader_save_messages (EMailReader *reader)
 	async_context->activity = g_object_ref (activity);
 	async_context->reader = g_object_ref (reader);
 
-	m_mail_folder_save_messages (
+	m_mail_folder_save_messages_in_maildir (
 		folder, uids,
 		destination,
 		G_PRIORITY_DEFAULT,

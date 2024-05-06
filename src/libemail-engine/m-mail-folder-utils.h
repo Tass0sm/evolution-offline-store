@@ -13,7 +13,8 @@ gboolean	m_mail_folder_save_messages_sync
 						 GFile *destination,
 						 GCancellable *cancellable,
 						 GError **error);
-void		m_mail_folder_save_messages	(CamelFolder *folder,
+void		m_mail_folder_save_messages_in_maildir
+						(CamelFolder *folder,
 						 GPtrArray *message_uids,
 						 GFile *destination,
 						 gint io_priority,

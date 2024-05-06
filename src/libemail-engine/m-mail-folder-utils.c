@@ -120,20 +120,10 @@ m_mail_folder_save_messages_sync (CamelFolder *folder,
 			message_uids->len),
 		message_uids->len);
 
-	file_output_stream = g_file_replace (
-		destination, NULL, FALSE,
-		G_FILE_CREATE_PRIVATE |
-		G_FILE_CREATE_REPLACE_DESTINATION,
-		cancellable, error);
-
-	if (file_output_stream == NULL) {
-		camel_operation_pop_message (cancellable);
-		return FALSE;
-	}
-
 	byte_array = g_byte_array_new ();
 
 	for (ii = 0; ii < message_uids->len; ii++) {
+		GFile *message_file;
 		CamelMimeMessage *message;
 		CamelMimeFilter *filter;
 		CamelStream *stream;
@@ -141,6 +131,21 @@ m_mail_folder_save_messages_sync (CamelFolder *folder,
 		gchar *from_line;
 		gint percent;
 		gint retval;
+
+		// TODO: Change message_file name and use maildir.
+		message_file = g_file_get_child (destination, "tmp_message_file_name.txt");
+
+		file_output_stream = g_file_replace (
+			message_file, NULL, FALSE,
+			G_FILE_CREATE_PRIVATE |
+			G_FILE_CREATE_REPLACE_DESTINATION,
+			cancellable, error);
+
+		if (file_output_stream == NULL) {
+			camel_operation_pop_message (cancellable);
+			return FALSE;
+		}
+
 
 		if (base_stream != NULL)
 			g_object_unref (base_stream);
@@ -235,13 +240,13 @@ exit:
 }
 
 void
-m_mail_folder_save_messages (CamelFolder *folder,
-                             GPtrArray *message_uids,
-                             GFile *destination,
-                             gint io_priority,
-                             GCancellable *cancellable,
-                             GAsyncReadyCallback callback,
-                             gpointer user_data)
+m_mail_folder_save_messages_in_maildir (CamelFolder *folder,
+					GPtrArray *message_uids,
+					GFile *destination,
+					gint io_priority,
+					GCancellable *cancellable,
+					GAsyncReadyCallback callback,
+					gpointer user_data)
 {
 	GSimpleAsyncResult *simple;
 	AsyncContext *context;
@@ -259,7 +264,7 @@ m_mail_folder_save_messages (CamelFolder *folder,
 
 	simple = g_simple_async_result_new (
 		G_OBJECT (folder), callback, user_data,
-		m_mail_folder_save_messages);
+		m_mail_folder_save_messages_in_maildir);
 
 	g_simple_async_result_set_check_cancellable (simple, cancellable);
 
@@ -283,7 +288,7 @@ m_mail_folder_save_messages_finish (CamelFolder *folder,
 	g_return_val_if_fail (
 		g_simple_async_result_is_valid (
 		result, G_OBJECT (folder),
-		m_mail_folder_save_messages), FALSE);
+		m_mail_folder_save_messages_in_maildir), FALSE);
 
 	simple = G_SIMPLE_ASYNC_RESULT (result);
 

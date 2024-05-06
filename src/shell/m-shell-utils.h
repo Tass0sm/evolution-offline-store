@@ -8,10 +8,9 @@ G_BEGIN_DECLS
 typedef void (* EShellOepnSaveCustomizeFunc)	(GtkFileChooserNative *file_chooser_native,
 						 gpointer user_data);
 
-GFile *		m_shell_run_save_dialog		(EShell *shell,
+GFile *		m_shell_run_create_dir_dialog	(EShell *shell,
 						 const gchar *title,
 						 const gchar *suggestion,
-						 const gchar *filters,
 						 EShellOepnSaveCustomizeFunc customize_func,
 						 gpointer customize_data);
 
