@@ -3,6 +3,7 @@
 #include "m-mail-folder-utils.h"
 
 #include <glib/gi18n-lib.h>
+#include <gio/gunixoutputstream.h>
 
 #include <libedataserver/libedataserver.h>
 
@@ -93,6 +94,43 @@ mail_folder_save_prepare_part (CamelMimePart *mime_part)
 	}
 }
 
+
+gint
+open_maildir_message_file(GFile *root, GCancellable* cancellable, GError** error)
+{
+	GError *local_error;
+	GFile *tmp_dir;
+	gchar *tmp_dir_path, *tmpl, *full_template;
+	gboolean dir_created;
+        gint fd;
+
+	local_error = NULL;
+
+	// TODO: Add Time and PID to template
+	tmpl = "a.XXXXXX.c";
+
+        tmp_dir = g_file_get_child(root, "tmp");
+	dir_created = g_file_make_directory(tmp_dir, cancellable, &local_error);
+
+	/* If make_directory failed for some reason other than the directory already existing,
+	   pass the error up. Otherwise, continue.  */
+	if (local_error &&
+	    !(local_error->domain == G_IO_ERROR &&
+	      local_error->code == G_IO_ERROR_EXISTS)) {
+		*error = g_error_copy(local_error);
+		return -1;
+        }
+
+	tmp_dir_path = g_file_get_path (tmp_dir);
+	full_template = g_strconcat (tmp_dir_path, G_DIR_SEPARATOR_S, tmpl, NULL);
+
+	fd = g_mkstemp(full_template);
+
+	return fd;
+}
+
+
+
 gboolean
 m_mail_folder_save_messages_sync (CamelFolder *folder,
                                   GPtrArray *message_uids,
@@ -100,7 +138,7 @@ m_mail_folder_save_messages_sync (CamelFolder *folder,
                                   GCancellable *cancellable,
                                   GError **error)
 {
-	GFileOutputStream *file_output_stream;
+	GUnixOutputStream *file_output_stream;
 	CamelStream *base_stream = NULL;
 	GByteArray *byte_array;
 	gboolean success = TRUE;
@@ -123,23 +161,18 @@ m_mail_folder_save_messages_sync (CamelFolder *folder,
 	byte_array = g_byte_array_new ();
 
 	for (ii = 0; ii < message_uids->len; ii++) {
-		GFile *message_file;
 		CamelMimeMessage *message;
 		CamelMimeFilter *filter;
 		CamelStream *stream;
 		const gchar *uid;
 		gchar *from_line;
+		gint message_file_fd;
 		gint percent;
 		gint retval;
 
-		// TODO: Change message_file name and use maildir.
-		message_file = g_file_get_child (destination, "tmp_message_file_name.txt");
-
-		file_output_stream = g_file_replace (
-			message_file, NULL, FALSE,
-			G_FILE_CREATE_PRIVATE |
-			G_FILE_CREATE_REPLACE_DESTINATION,
-			cancellable, error);
+		message_file_fd = open_maildir_message_file (destination, cancellable, error);
+		file_output_stream = g_unix_output_stream_new (message_file_fd,
+							       FALSE);
 
 		if (file_output_stream == NULL) {
 			camel_operation_pop_message (cancellable);
